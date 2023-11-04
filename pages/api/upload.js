@@ -34,8 +34,6 @@ for (const file of files.file) {
         });
     const link = result.secure_url;
     links.push(link)
-    console.log('Link:', links)
-    console.log('result:', result)
 }
 return res.json({links});
 }
