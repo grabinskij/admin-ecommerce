@@ -54,7 +54,7 @@ function Categories({swal}) {
     return (
         <>
             <h1>Categories</h1>
-            {/*<label>{editCategory ? `Edit category ${editedCategory?.name}` : 'Create new category'}</label>*/}
+            <label>{editCategory && editedCategory ? `Edit category ${editedCategory?.name}` : 'Create new category'}</label>
             <form onSubmit={saveCategory} className="flex gap-1">
                 <input
                     className="mb-0"
