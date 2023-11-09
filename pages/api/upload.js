@@ -2,12 +2,17 @@ import multiparty from "multiparty";
 import fs from "fs";
 import {v2 as cloudinary} from 'cloudinary';
 import mime from "mime-types";
+import {mongooseConnect} from "../../lib/mongoose";
+import {isAdminRequest} from "./auth/[...nextauth]";
 
 
 
 export default async function handle(req, res) {
-   const form = new multiparty.Form();
-   const {fields, files} = await new Promise((resolve, reject) => {
+    await mongooseConnect();
+    await isAdminRequest(req, res);
+
+    const form = new multiparty.Form();
+    const {fields, files} = await new Promise((resolve, reject) => {
        form.parse(req, (err, fields, files) => {
            if(err) reject(err);
            resolve({fields, files});
