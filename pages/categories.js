@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import { withSwal } from 'react-sweetalert2';
+import Spinner from "../components/Spinner";
 
 function Categories({swal}) {
     const [editedCategory, setEditedCategory] = useState(null);
@@ -8,12 +9,16 @@ function Categories({swal}) {
     const [categories, setCategories] = useState([]);
     const [parentCategory, setParentCategory] = useState('');
     const [properties, setProperties] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         fetchCategories();
     }, []);
     function fetchCategories() {
+        setIsLoading(true);
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
+            setIsLoading(false);
         });
     }
     async function saveCategory(e) {
@@ -179,6 +184,15 @@ function Categories({swal}) {
                     </tr>
                     </thead>
                     <tbody>
+                    {isLoading && (
+                        <tr>
+                            <td colSpan={3}>
+                                <div className="py-4">
+                                    <Spinner fullWidth={true} />
+                                </div>
+                            </td>
+                        </tr>
+                    )}
                     {categories.length > 0 && categories.map(category => (
                         <tr key={category._id}>
                             <td>{category.name}</td>

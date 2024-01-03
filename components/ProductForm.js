@@ -24,11 +24,14 @@ export default function ProductForm({
     const [goToProducts, setGoToProducts] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(false);
     const router = useRouter()
 
     useEffect(() => {
+        setCategoriesLoading(true);
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
+            setCategoriesLoading(false);
         })
     }, []);
 
@@ -100,6 +103,9 @@ export default function ProductForm({
                     <option key={c._id} value={c._id}>{c.name}</option>
                 ))}
             </select>
+            {categoriesLoading && (
+                <Spinner />
+            )}
             {propertiesToFill.length > 0 && propertiesToFill.map(p => (
                 <div key={p.name} className="flex gap-1">
                     <div>{p.name}</div>
