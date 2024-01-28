@@ -10,7 +10,8 @@ module.exports = {
       colors: {
         primary: '#187975',
         highlight: '#eae8fb',
-        bgGray: '#bfb5d2',
+        bgGray: '#263544',
+        bgActive: '#1d2531',
       },
     },
   },

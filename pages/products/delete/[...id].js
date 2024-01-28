@@ -1,16 +1,18 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {withSwal} from "react-sweetalert2";
+import {handleApiError} from "../../api/utils";
 
-export default function DeleteProductPage() {
+function DeleteProductPage({swal}) {
     const router = useRouter()
     const [productInfo, setProductInfo] = useState();
     const {id} = router.query;
-    useEffect( () => {
-        if(!id){
+    useEffect(() => {
+        if (!id) {
             return;
         }
-        axios.get('/api/products?id='+id).then(response => {
+        axios.get('/api/products?id=' + id).then(response => {
             setProductInfo(response.data);
         })
     }, [id])
@@ -18,9 +20,14 @@ export default function DeleteProductPage() {
     function goBack() {
         router.push('/products');
     }
+
     async function deleteProduct() {
-        await axios.delete('/api/products?id='+id);
-        goBack();
+        try {
+            await axios.delete('/api/products?id=' + id);
+            goBack();
+        } catch (error) {
+            await handleApiError(swal, error);
+        }
     }
 
     return (
@@ -33,3 +40,7 @@ export default function DeleteProductPage() {
         </>
     )
 }
+
+export default withSwal(({swal}, ref) => (
+    <DeleteProductPage swal={swal}/>
+));

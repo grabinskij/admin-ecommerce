@@ -3,18 +3,22 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import Spinner from "./Spinner";
 import {ReactSortable} from "react-sortablejs";
+import {withSwal} from "react-sweetalert2";
+import {handleApiError} from "../pages/api/utils";
 
 
+function ProductForm({swal, ...props}) {
 
-export default function ProductForm({
-    _id,
-    title: existingTitle,
-    description: existingDescription,
-    price: existingPrice,
-    images: existingImages,
-    category: existingCategory,
-    properties: existingProperties,
-}) {
+    const {
+        _id,
+        title: existingTitle,
+        description: existingDescription,
+        price: existingPrice,
+        images: existingImages,
+        category: existingCategory,
+        properties: existingProperties,
+    } = props
+
     const [title, setTitle] = useState(existingTitle || '');
     const [description, setDescription] = useState(existingDescription || '');
     const [category, setCategory] = useState(existingCategory || '');
@@ -38,37 +42,48 @@ export default function ProductForm({
     async function saveProduct(e) {
         e.preventDefault();
         const data = {title, description, price, images, category, properties: productProperties};
-        if(_id){
-            await axios.put('/api/products', {...data, _id})
-        } else {
-            await axios.post('/api/products', data);
+        try {
+            if (_id) {
+                await axios.put('/api/products', {...data, _id})
+            } else {
+                await axios.post('/api/products', data);
+            }
+            setGoToProducts(true);
+        } catch (error) {
+            await handleApiError(swal, error);
         }
-        setGoToProducts(true);
     }
 
     if (goToProducts) {
         router.push('/products');
     }
+
     async function uploadImages(e) {
         const files = e.target?.files;
-        if(files?.length > 0) {
+        try {
+        if (files?.length > 0) {
             setIsUploading(true);
             const data = new FormData();
-            for(const file of files){
+            for (const file of files) {
                 data.append('file', file)
             }
             const res = await axios.post('/api/upload', data);
-                setImages(oldImages => {
-                    return [...oldImages, ...res.data.links];
-            })
+            setImages(oldImages => {
+                return [...oldImages, ...res.data.links];
+            });
+        }
+        } catch (error) {
+            await handleApiError(swal, error);
+        } finally {
             setIsUploading(false);
         }
     }
+
     function updateImagesOrder(images) {
         setImages(images);
     }
 
-    function setProductProp(propName, value){
+    function setProductProp(propName, value) {
         setProductProperties(prev => {
             const newProductProps = {...prev};
             newProductProps[propName] = value;
@@ -77,15 +92,16 @@ export default function ProductForm({
     }
 
     const propertiesToFill = [];
-    if(categories.length > 0 && category){
-       let catInfo = categories.find(({_id}) => _id === category)
+    if (categories.length > 0 && category) {
+        let catInfo = categories.find(({_id}) => _id === category)
         propertiesToFill.push(...catInfo.properties);
-       while(catInfo?.parent?._id) {
-           const parentCat = categories.find(({_id}) => _id === catInfo.parent?._id);
-           propertiesToFill.push(...parentCat.properties);
-           catInfo = parentCat;
-       }
+        while (catInfo?.parent?._id) {
+            const parentCat = categories.find(({_id}) => _id === catInfo.parent?._id);
+            propertiesToFill.push(...parentCat.properties);
+            catInfo = parentCat;
+        }
     }
+
 
     return (
         <form onSubmit={saveProduct}>
@@ -104,7 +120,7 @@ export default function ProductForm({
                 ))}
             </select>
             {categoriesLoading && (
-                <Spinner />
+                <Spinner/>
             )}
             {propertiesToFill.length > 0 && propertiesToFill.map(p => (
                 <div key={p.name} className="flex gap-1">
@@ -131,7 +147,7 @@ export default function ProductForm({
                 </ReactSortable>
                 {isUploading && (
                     <div className="h-28 flex items-center">
-                        <Spinner />
+                        <Spinner/>
                     </div>
                 )}
                 <label className="w-28 h-28 cursor-pointer border text-center flex flex-col
@@ -167,3 +183,7 @@ export default function ProductForm({
         </form>
     )
 }
+
+export default withSwal(({swal, ...props}, ref) => {
+    return <ProductForm swal={swal} {...props} />;
+});

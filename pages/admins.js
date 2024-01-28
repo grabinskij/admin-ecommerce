@@ -4,11 +4,23 @@ import {withSwal} from "react-sweetalert2";
 import Spinner from "../components/Spinner";
 import {prettyDate} from "../lib/date";
 
+
 function AdminsPage({swal}) {
     const [email, setEmail] = useState('');
     const [adminEmails, setAdminEmails] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    function addAdmin(e){
+
+    const [debouncedEmail, setDebouncedEmail] = useState('');
+
+    const debounce = (func, delay) => {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func(...args), delay);
+        };
+    };
+
+    function addAdmin(e) {
         e.preventDefault();
         axios.post('/api/admins', {email}).then(res => {
             swal.fire({
@@ -16,8 +28,9 @@ function AdminsPage({swal}) {
                 icon: "success",
             })
             setEmail('');
-            loadAdmins();
-        }).catch(err => {
+            debouncedLoadAdmins();
+        })
+            .catch(err => {
             swal.fire({
                 title: 'Error!',
                 text: err.response.data.message,
@@ -26,7 +39,7 @@ function AdminsPage({swal}) {
         });
     }
 
-    function deleteAdmin(_id, email){
+    function deleteAdmin(_id, email) {
         swal.fire({
             title: 'Are you sure',
             text: `Do you really want to delete ${email}?`,
@@ -35,30 +48,61 @@ function AdminsPage({swal}) {
             confirmButtonText: 'Yes, Delete!',
             reverseButtons: true,
             confirmButtonColor: '#d56',
-        }).then( async result => {
-            if (result.isConfirmed){
-                axios.delete('/api/admins?_id='+_id).then(() => {
+        }).then(async result => {
+            if (result.isConfirmed) {
+                axios.delete('/api/admins?_id=' + _id).then(() => {
                     swal.fire({
                         title: 'Admin deleted!',
                         icon: "success",
                     })
-                    loadAdmins();
+                    debouncedLoadAdmins();
                 })
             }
         });
     }
 
-    function loadAdmins() {
+    const debouncedLoadAdmins = debounce(() => {
         setIsLoading(true);
-        axios.get('/api/admins').then(res => {
-            setAdminEmails(res.data);
-            setIsLoading(false);
-        });
-    }
 
+        axios.get('/api/admins')
+            .then(res => {
+                setAdminEmails(res.data);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                setIsLoading(false);
+
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        swal.fire({
+                            title: 'Forbidden',
+                            text: 'You do not have permission to access this resource',
+                            icon: 'error',
+                        });
+                    } else {
+                        swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while loading admins',
+                            icon: 'error',
+                        });
+                    }
+                } else {
+                    swal.fire({
+                        title: 'Error',
+                        text: 'An unexpected error occurred while loading admins',
+                        icon: 'error',
+                    });
+                }
+            });
+    }, 500); // Adjust the delay as needed
+
+    // Use debouncedLoadAdmins in useEffect
     useEffect(() => {
-        loadAdmins()
-    }, [])
+        console.log('Component is mounting. Calling loadAdmins...');
+        debouncedLoadAdmins();
+    }, [debouncedEmail]); // Include debouncedEmail in the dependencies
+
+
     return (
         <>
             <h1>Admins</h1>
@@ -95,19 +139,21 @@ function AdminsPage({swal}) {
                     <tr>
                         <td colSpan={2}>
                             <div className="py-4">
-                                <Spinner fullWidth={true} />
+                                <Spinner fullWidth={true}/>
                             </div>
                         </td>
                     </tr>
                 )}
                 {adminEmails.length > 0 && adminEmails.map(adminEmail => (
-                    <tr>
+                    <tr key={adminEmail.email}>
                         <td>{adminEmail.email}</td>
                         <td>
                             {adminEmail.createdAt && prettyDate(adminEmail.createdAt)}
                         </td>
                         <td>
-                            <button className="btn-red" onClick={() => deleteAdmin(adminEmail._id, adminEmail.email)}>Delete</button>
+                            <button className="btn-red"
+                                    onClick={() => deleteAdmin(adminEmail._id, adminEmail.email)}>Delete
+                            </button>
                         </td>
                     </tr>
                 ))}
@@ -116,6 +162,8 @@ function AdminsPage({swal}) {
         </>
     )
 }
+
+
 export default withSwal(({swal}) => (
-    <AdminsPage swal={swal} />
+    <AdminsPage swal={swal}/>
 ))

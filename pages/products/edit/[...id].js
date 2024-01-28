@@ -1,8 +1,8 @@
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import ProductForm from "@/components/ProductForm";
 import Spinner from "../../../components/Spinner";
+import ProductForm from "../../../components/ProductForm";
 
 
 export default function EditProductPage() {
@@ -27,7 +27,15 @@ export default function EditProductPage() {
                 <Spinner fullWidth={true} />
             )}
             {productInfo && (
-                <ProductForm {...productInfo} />
+                <ProductForm
+                    _id={productInfo._id}
+                    title={productInfo.title}
+                    description={productInfo.description}
+                    price={productInfo.price}
+                    images={productInfo.images}
+                    category={productInfo.category}
+                    properties={productInfo.properties}
+                />
             )}
         </>
     )
