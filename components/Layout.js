@@ -9,9 +9,23 @@ export default function Layout({ children }) {
     const { data: session } = useSession();
     if(!session){
         return (
-            <div className='w-screen h-screen flex items-center'>
-                <div className="text-center w-full">
-                    <button onClick={() => signIn('google')} className="bg-emerald-400 p-2 px-4 rounded-md">Login</button>
+            <div className="flex items-center justify-center h-screen">
+                <div className="bg-slate-100 p-8 rounded shadow-md">
+                    <h2 className="flex justify-center text-2xl font-semibold mb-4">Sign In</h2>
+                    <div className="flex justify-center mb-4">
+                        <Logo className="block" />
+                    </div>
+                    <p className="text-gray-600 mb-4 text-xs md:text-sm">
+                        You are not authorized to access this page. <br/>Please sign in using your Google account.
+                    </p>
+                    <div className="flex justify-center">
+                        <button
+                            onClick={() => signIn('google')}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Sign In with Google
+                        </button>
+                    </div>
                 </div>
             </div>
         );

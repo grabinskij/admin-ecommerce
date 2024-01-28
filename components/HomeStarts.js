@@ -3,7 +3,7 @@ import axios from "axios";
 import {subHours} from "date-fns";
 import Spinner from "./Spinner";
 
-export default function HomeStats() {
+export default function HomeStarts() {
     const [orders,setOrders] = useState([]);
     const [isLoading,setIsLoading] = useState(false);
     useEffect(() => {
