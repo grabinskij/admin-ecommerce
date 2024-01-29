@@ -11,6 +11,7 @@ mongooseConnect();
 
 
 export const authOptions = {
+    secret: process.env.SECRET,
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
