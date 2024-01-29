@@ -96,11 +96,10 @@ function AdminsPage({swal}) {
             });
     }, 500); // Adjust the delay as needed
 
-    // Use debouncedLoadAdmins in useEffect
+
     useEffect(() => {
-        console.log('Component is mounting. Calling loadAdmins...');
         debouncedLoadAdmins();
-    }, [debouncedEmail]); // Include debouncedEmail in the dependencies
+    }, [debouncedEmail]);
 
 
     return (

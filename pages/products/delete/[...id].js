@@ -32,7 +32,7 @@ function DeleteProductPage({swal}) {
 
     return (
         <>
-            <h1 className="text-center">Do you really want to delete "{productInfo?.title}" product?</h1>
+            <h1 className="text-center">Do you really want to delete &nbsp;&quot;{productInfo?.title}&quot; product?</h1>
             <div className="flex justify-center gap-2">
                 <button className="btn-red" onClick={deleteProduct}>Yes</button>
                 <button className="btn-default" onClick={goBack}>No</button>
