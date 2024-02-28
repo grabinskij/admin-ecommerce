@@ -13,6 +13,9 @@ module.exports = {
         bgGray: '#263544',
         bgActive: '#1d2531',
       },
+      zIndex: {
+        '9999': '9999',
+      },
     },
   },
   plugins: [],

@@ -26,7 +26,7 @@ export default function Nav({show, setShow}) {
     return (
         <aside className={(show?'left-0':'-left-full')+" top-0 bg-bgGray p-4 fixed w-full min-h-full md:static md:w-auto transition-all"}>
             <nav className="flex flex-col gap-3" onClick={handleClick}>
-                <div className="text-stone-300 flex align-center justify-center mb-12">
+                <div className="text-stone-300 flex align-center justify-center mb-8 md:mb-12 mt-4 md:mt-0">
                     <Logo />
                 </div>
                 <Link href={'/'} className={pathname === '/' ? activeLink : inactiveLink}>
