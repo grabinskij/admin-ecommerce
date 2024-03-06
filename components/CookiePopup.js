@@ -88,7 +88,7 @@ const CookiePopup = ({setShow, setShowChangeConsent, setPopupVisible, popupVisib
                             <div className="overflow-y-auto pl-2 pr-4 py-4 max-h-[calc(100vh-400px)]">
                                 {language === 'English' ? (
                                     <>
-                                        <p className="mb-2">By clicking the "Accept All" button, you consent to this website using
+                                        <p className="mb-2">By clicking the &quot;Accept All&quot; button, you consent to this website using
                                             cookies and
                                             similar
                                             technologies to store and retrieve information on your device. These
@@ -126,7 +126,7 @@ const CookiePopup = ({setShow, setShowChangeConsent, setPopupVisible, popupVisib
                                 ) : (
                                     <>
                                         <p className="mb-2">
-                                            Durch Betätigung der Schaltfläche "Alle akzeptieren" geben Sie Ihre
+                                            Durch Betätigung der Schaltfläche &quot;Alle akzeptieren&quot; geben Sie Ihre
                                             Zustimmung, dass diese Webseite
                                             Cookies und ähnliche Technologien einsetzt, um Informationen auf Ihrem
                                             Endgerät zu speichern und
