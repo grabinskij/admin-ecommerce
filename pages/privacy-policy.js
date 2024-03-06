@@ -1,8 +1,14 @@
 import React from 'react';
+import { useSession } from "next-auth/react";
 import ButtonHome from "../components/ButtonHome";
+import ButtonHomeNoSession from "../components/ButtonHomeNoSession";
 
 
-const PrivacyPolicy = () => {
+const PrivacyPolicy = ({setPopupVisible, setShowOverlay, showChangeConsent}) => {
+
+    const { data: session } = useSession();
+
+
     return (
         <div className="flex justify-center items-center leading-6">
             <div className="max-w-6xl w-full mx-auto px-1 text-black md:px-20 text-left">
@@ -20,7 +26,15 @@ const PrivacyPolicy = () => {
                             </button>
                         </div>
                         <h1 className="m-auto text-center text-2xl md:text-4xl pb-30 font-bold my-8">Privacy Policy</h1>
-                        <ButtonHome/>
+                        {!session ? (
+
+                                <ButtonHomeNoSession setPopupVisible={setPopupVisible} setShowOverlay={setShowOverlay} showChangeConsent={showChangeConsent}/>
+                            )
+                        :
+                            (
+                                <ButtonHome/>
+                            )
+                        }
                     </div>
                 </div>
 
@@ -180,10 +194,11 @@ const PrivacyPolicy = () => {
                     Third-party
                     cookies enable the integration of specific services from external providers.
                 </p>
-                <p className="text-lg mb-10">They serve various functions. When we obtain your consent for the
-                    storage of cookies and similar
-                    technologies,
-                    processing is based solely on this consent.
+                <p className="text-lg mb-10">The storage of cookies is carried out in accordance with Art. 6 para. 1 lit. f GDPR, unless there is another
+                    legal basis. The operator of the website has a legitimate interest in storing necessary cookies to provide its
+                    services technically flawless and optimized. If consent has been requested for the storage of cookies and
+                    similar tracking technologies, the processing is carried out exclusively on the basis of this consent (Art. 6
+                    para. 1 lit. a GDPR and § 25 para. 1 TTDSG); this consent can be revoked at any time.
                 </p>
                 <p className="text-lg mb-10">You have the option to configure your browser to inform you about the
                     setting of cookies, to allow
@@ -511,7 +526,15 @@ const PrivacyPolicy = () => {
                             </button>
                         </div>
                         <h1 className="m-auto text-center text-2xl md:text-4xl pb-30 font-bold my-8">Datenschutzerklärung</h1>
-                        <ButtonHome/>
+                        {!session ? (
+
+                                <ButtonHomeNoSession setPopupVisible={setPopupVisible} setShowOverlay={setShowOverlay} showChangeConsent={showChangeConsent}/>
+                            )
+                            :
+                            (
+                                <ButtonHome/>
+                            )
+                        }
                     </div>
                 </div>
 
@@ -679,11 +702,14 @@ const PrivacyPolicy = () => {
                     Drittanbieter-Cookies ermöglichen die Integration spezifischer Dienste von externen
                     Anbietern.
                 </p>
-                <p className="text-lg mb-10">Sie erfüllen verschiedene Funktionen. Wenn wir Ihre Einwilligung zur
-                    Speicherung von Cookies
-                    und ähnlichen
-                    Technologien einholen, erfolgt die Verarbeitung ausschließlich auf Grundlage dieser
-                    Einwilligung.
+                <p className="text-lg mb-10">Die Speicherung von Cookies erfolgt gemäß Art. 6 Abs. 1 lit. f DSGVO, sofern keine
+                    andere Rechtsgrundlage vorliegt. Der Betreiber der Website hat ein legitimes Interesse an der Speicherung von
+                    notwendigen Cookies, um seine Dienste technisch einwandfrei und optimiert bereitzustellen. Falls um Einwilligung
+                    zur
+                    Speicherung von Cookies und ähnlichen Tracking-Technologien gebeten wurde, erfolgt die Verarbeitung
+                    ausschließlich
+                    auf Basis dieser Einwilligung (Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TTDSG); diese
+                    Einwilligung kann jederzeit widerrufen werden.
                 </p>
                 <p className="text-lg mb-10">Sie haben die Möglichkeit, Ihren Browser so einzustellen, dass Sie über
                     das Setzen von
@@ -999,7 +1025,15 @@ const PrivacyPolicy = () => {
                        className="block break-all max-w-max text-blue-500 hover:text-blue-700">https://www.jsdelivr.com/privacy-policy-jsdelivr-net</a>
                 </p><br/><br/>
 
-                <ButtonHome/>
+                {!session ? (
+
+                        <ButtonHomeNoSession setPopupVisible={setPopupVisible} setShowOverlay={setShowOverlay} showChangeConsent={showChangeConsent}/>
+                    )
+                    :
+                    (
+                        <ButtonHome/>
+                    )
+                }
 
                 <br /><br /><br /><br />
 

@@ -1,8 +1,13 @@
 import React from 'react';
 import ButtonHome from "../components/ButtonHome";
+import ButtonHomeNoSession from "../components/ButtonHomeNoSession";
+import {useSession} from "next-auth/react";
 
 
-const LegalNotice = () => {
+const LegalNotice = ({setPopupVisible, setShowOverlay, showChangeConsent}) => {
+
+    const { data: session } = useSession();
+
     return (
         <div className="flex justify-center items-center leading-6">
             <div className="max-w-6xl w-full mx-auto px-4 text-black md:px-20 text-left">
@@ -20,7 +25,15 @@ const LegalNotice = () => {
                             </button>
                         </div>
                         <h1 className="m-auto text-center text-2xl md:text-4xl pb-30 font-bold my-8">Legal Notice</h1>
-                        <ButtonHome/>
+                        {!session ? (
+
+                                <ButtonHomeNoSession setPopupVisible={setPopupVisible} setShowOverlay={setShowOverlay} showChangeConsent={showChangeConsent}/>
+                            )
+                            :
+                            (
+                                <ButtonHome/>
+                            )
+                        }
                     </div>
                 </div>
 
@@ -157,7 +170,15 @@ const LegalNotice = () => {
                             </button>
                         </div>
                         <h1 className="m-auto text-center text-2xl md:text-4xl pb-30 font-bold my-8">Impressum</h1>
-                        <ButtonHome/>
+                        {!session ? (
+
+                                <ButtonHomeNoSession setPopupVisible={setPopupVisible} setShowOverlay={setShowOverlay} showChangeConsent={showChangeConsent}/>
+                            )
+                            :
+                            (
+                                <ButtonHome/>
+                            )
+                        }
                     </div>
                 </div>
 
@@ -281,7 +302,15 @@ const LegalNotice = () => {
                    className="block break-all max-w-max text-blue-500 hover:text-blue-700 mb-12">https://www.facebook.com/bogdan.grabinsky</a>
 
 
-                <ButtonHome/>
+                {!session ? (
+
+                        <ButtonHomeNoSession setPopupVisible={setPopupVisible} setShowOverlay={setShowOverlay} showChangeConsent={showChangeConsent}/>
+                    )
+                    :
+                    (
+                        <ButtonHome/>
+                    )
+                }
 
                 <br /><br /><br /><br />
 
